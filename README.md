@@ -7,6 +7,10 @@ pull request per group per week.
 This repository is not the Portwell Assist product. It is the delivery system that produces the
 PDLC lifecycle artifact for Assist.
 
+> **Start with [`STUDENT-GUIDE.md`](STUDENT-GUIDE.md).** It carries the setup, the map, the
+> lifecycle commands, a worked change, and what each week must deliver. This README is the
+> reference for the layout and the invariants.
+
 ## Setup
 
 ```bash
