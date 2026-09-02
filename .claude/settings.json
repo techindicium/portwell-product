@@ -1,0 +1,38 @@
+{
+  "$comment": "Project-scoped permissions for the PDLC track. Groups extend this file; they do not replace it. Nothing here grants unrestricted shell execution, and no rule should be added that does.",
+  "permissions": {
+    "defaultMode": "default",
+    "allow": [
+      "Read(//**)",
+      "Grep(//**)",
+      "Glob(//**)",
+      "Edit(./**)",
+      "Write(./**)",
+      "Bash(python3 scripts/lifecycle.py:*)",
+      "Bash(python3 -m pytest:*)",
+      "Bash(make verify)",
+      "Bash(make check-state)",
+      "Bash(git status:*)",
+      "Bash(git diff:*)",
+      "Bash(git log:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)"
+    ],
+    "deny": [
+      "Read(./.env)",
+      "Read(./.env.*)",
+      "Read(./secrets/**)",
+      "Write(./state/lifecycle.jsonl)",
+      "Edit(./state/lifecycle.jsonl)",
+      "Write(./scenarios/heldout/**)",
+      "Bash(git push:*)",
+      "Bash(git commit --no-verify:*)",
+      "Bash(rm -rf:*)",
+      "Bash(curl:*)",
+      "Bash(*|*sh)"
+    ]
+  },
+  "hooks": {
+    "$comment": "Hook wiring lives in hooks/hooks.json and is loaded from there so the enforcement surface stays reviewable on its own."
+  }
+}

@@ -1,0 +1,16 @@
+id: SC-PDLC-02
+family: recovery
+title: Exhaust the correction budget and escalate instead of retrying
+item: SEED-0002
+given:
+  - The item reaches verify and the deterministic checks fail
+  - Each correction attempt changes the artifact but does not fix the failing check
+  - state/state-model.json sets max_correction_attempts to 3
+when: The system attempts a fourth correction
+expect:
+  states: [intake, context, route, act, verify, act, verify, act, verify, escalated]
+  evidence: [verification-report, escalation]
+  refusals:
+    - "The correction loop is bounded, and exhaustion escalates rather than retries."
+  escalates: true
+detects: An unbounded retry loop that consumes budget and leaves no readable stopping condition

@@ -1,0 +1,4 @@
+# The shell's own dependencies. Two, on purpose.
+# scripts/ and hooks/ are standard library only so hooks run without a virtual environment.
+pytest>=8
+pyyaml>=6

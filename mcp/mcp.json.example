@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "portwell-sim": {
+      "command": "python3",
+      "args": ["mcp/portwell_sim.py"],
+      "env": {
+        "PORTWELL_SIM_FIXTURES": "fixtures/"
+      }
+    }
+  }
+}

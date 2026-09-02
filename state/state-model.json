@@ -1,0 +1,86 @@
+{
+  "$comment": "The common delivery path from the course operating model, plus the failure states that make it honest. Groups extend states, transitions, and evidence requirements for their track; they should not remove the failure states.",
+  "path": ["intake", "context", "route", "act", "verify", "approve", "handoff", "observe"],
+  "states": {
+    "intake": {
+      "kind": "normal",
+      "description": "A work item exists and its request is recorded.",
+      "evidence": ["request"]
+    },
+    "context": {
+      "kind": "normal",
+      "description": "The context required to act has been assembled and its provenance recorded.",
+      "evidence": ["context-manifest"]
+    },
+    "route": {
+      "kind": "normal",
+      "description": "An autonomy level and path have been selected, with the inputs to that decision recorded.",
+      "evidence": ["routing-decision"]
+    },
+    "act": {
+      "kind": "normal",
+      "description": "The change was attempted in isolation.",
+      "evidence": ["attempt-trace"]
+    },
+    "verify": {
+      "kind": "normal",
+      "description": "Deterministic checks ran and their results are recorded, pass or fail.",
+      "evidence": ["verification-report"]
+    },
+    "approve": {
+      "kind": "normal",
+      "description": "A named human or gate accepted the result against stated acceptance conditions.",
+      "evidence": ["approval"]
+    },
+    "handoff": {
+      "kind": "normal",
+      "description": "The artifact was published or handed to its consumer with its contract.",
+      "evidence": ["handoff-note"]
+    },
+    "observe": {
+      "kind": "normal",
+      "description": "The outcome was measured after handoff. Not terminal: an observed artifact is retired, or its observation opens a new item.",
+      "evidence": ["observation"]
+    },
+    "blocked": {
+      "kind": "failure",
+      "description": "Work cannot proceed without an input that the system cannot obtain on its own.",
+      "evidence": ["blocker"]
+    },
+    "escalated": {
+      "kind": "failure",
+      "description": "A human owner has been asked to decide. Autonomous work has stopped.",
+      "evidence": ["escalation"]
+    },
+    "rejected": {
+      "kind": "terminal",
+      "description": "The item was declined at a gate and will not proceed in this form.",
+      "evidence": ["rejection"]
+    },
+    "retired": {
+      "kind": "terminal",
+      "description": "A previously handed-off artifact has been withdrawn from use.",
+      "evidence": ["retirement"]
+    }
+  },
+  "transitions": {
+    "intake": ["context", "rejected", "blocked"],
+    "context": ["route", "blocked", "escalated"],
+    "route": ["act", "escalated", "blocked"],
+    "act": ["verify", "blocked", "escalated"],
+    "verify": ["approve", "act", "escalated", "rejected"],
+    "approve": ["handoff", "act", "rejected"],
+    "handoff": ["observe", "retired"],
+    "observe": ["retired", "intake"],
+    "blocked": ["context", "escalated", "rejected"],
+    "escalated": ["route", "act", "rejected", "retired"],
+    "rejected": [],
+    "retired": []
+  },
+  "limits": {
+    "$comment": "Budgets the harness enforces. verify -> act is the correction loop; when it is exhausted the item escalates rather than retrying.",
+    "max_correction_attempts": 3,
+    "max_transitions_per_item": 40,
+    "escalate_after_blocked_transitions": 2
+  }
+}

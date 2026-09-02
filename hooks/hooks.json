@@ -1,0 +1,41 @@
+{
+  "$comment": "Deterministic interception points for the PDLC track. Each entry names the invariant it protects. A hook that cannot say what it protects should be deleted rather than kept.",
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/guard_paths.py\"",
+            "$protects": "Lifecycle state is append-only through the CLI, and held-out scenarios are never writable."
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit|MultiEdit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/hooks/check_evidence.py\"",
+            "$protects": "A state advance recorded in the log has a readable evidence file behind it."
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/scripts/lifecycle.py\" validate --quiet",
+            "$protects": "A run does not end leaving the lifecycle log invalid."
+          }
+        ]
+      }
+    ]
+  }
+}

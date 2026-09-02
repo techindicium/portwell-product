@@ -1,0 +1,15 @@
+id: SC-PDLC-01
+family: normal
+title: Carry one ordinary item from intake to handoff with complete evidence
+item: SEED-0001
+given:
+  - The item's request names an outcome, its constraints, and what is out of scope
+  - Every artifact the item needs is current and sourced
+  - No policy in docs/policies.md marks the item's product area as consequential
+when: The lifecycle-trace skill runs the item through the common path
+expect:
+  states: [intake, context, route, act, verify, approve, handoff]
+  evidence: [request, context-manifest, routing-decision, attempt-trace, verification-report, approval, handoff-note]
+  refusals: []
+  escalates: false
+detects: A lifecycle that records states without producing the evidence each state requires
