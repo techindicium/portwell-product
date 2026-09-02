@@ -2,7 +2,7 @@
 
 A scenario is one case the track's system is expected to handle, written so that it can be run
 and its outcome compared against a stated expectation. Scenarios are the unit the Module 4
-evaluation set is built from, but they are useful from Module 1 because a lifecycle you cannot
+evaluation set is built from, but they are useful from Module 1 because a lifecycle nothing can
 run a case through is a diagram.
 
 ```text

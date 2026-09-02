@@ -8,14 +8,20 @@ PYTHON       ?= python3
 
 -include Makefile.local
 
-.PHONY: help verify check-state scenarios test hooks-test clean
+.PHONY: help setup verify check-state scenarios test hooks-test clean
 
 help:
+	@echo "setup       create .venv and install everything this track needs"
 	@echo "verify      run every deterministic check, in the order they should run"
 	@echo "check-state validate the lifecycle log against the state model"
 	@echo "scenarios   check the shape of every visible scenario file"
 	@echo "test        run the repository's tests ($(PYTEST_PATHS))"
 	@echo "hooks-test  exercise the guard hook's refusal and allow paths"
+
+# Run this once per clone. It creates .venv and installs the shell's dependencies plus any
+# domain package the track carries, so `make verify` passes on a clean clone.
+setup:
+	@./scripts/setup.sh
 
 # Order is the teaching point. Cheap structural checks first, then the shape of the evaluation
 # set, then behaviour. Specialist-agent and human review come after this target, never instead.

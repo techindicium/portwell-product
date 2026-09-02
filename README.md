@@ -14,12 +14,15 @@ PDLC lifecycle artifact for Assist.
 ## Setup
 
 ```bash
-python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
-make verify
+./scripts/setup.sh
+make verify PYTHON=.venv/bin/python
 ```
 
+`setup.sh` creates `.venv` and installs the shell's dependencies plus any domain package this
+track carries. It prefers `uv` when present and falls back to the stdlib `venv` module.
+
 `make verify` must pass on a clean clone. If it does not, that is a bug in the track baseline
-and belongs to the teaching team, not to your group.
+and belongs to the teaching team rather than to the group.
 
 ## Layout
 
@@ -41,7 +44,7 @@ fixtures/                    the track's seed material
 evidence/<item>/             what each state transition recorded
 ```
 
-## The rules that are not yours to change
+## The rules that cannot be changed
 
 Three, and each has a test that fails if it is removed.
 
@@ -53,8 +56,8 @@ Three, and each has a test that fails if it is removed.
 3. **Held-out cases stay held out.** `scenarios/heldout/` is denied in settings and refused by
    the guard, before it exists. Regression: `tests/test_scenarios.py`.
 
-Everything else is yours: skills, agents, tools, additional hooks, additional states, the
-track's domain checks, and the scenarios you add.
+Everything else is open: skills, agents, tools, additional hooks, additional states, the
+track's domain checks, and any scenario added to it.
 
 ## Working rhythm
 
@@ -65,8 +68,8 @@ track's domain checks, and the scenarios you add.
 | 3 | Meta-harness controls | One prose rule turned into an executable control with a regression case |
 | 4 | Verification and operation | An evaluation set, ordered checks, held-out failure analysis, operating measures |
 
-Before implementing your group's lens, model the whole capability. The lens is the part you go
-deeper on, not the part you do instead.
+Before implementing the group's lens, model the whole capability. The lens is the part to go
+deeper on, not the part to do instead.
 
 ## Recording work
 

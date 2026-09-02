@@ -9,6 +9,6 @@ cross-track reference stops resolving.
 
 ## Rule
 
-Own the entities your track produces. Reference, never renumber, the entities another track
+Own the entities this track produces. Reference, never renumber, the entities another track
 produces. A reference to an entity that does not exist is a finding recorded against the
 referring artifact.

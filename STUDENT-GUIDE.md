@@ -38,13 +38,18 @@ harness, not the fictional product.
 ## The first thirty minutes
 
 ```bash
-python3 -m venv .venv
-.venv/bin/pip install -r requirements.txt
-make verify
+./scripts/setup.sh          # or: make setup
+make verify PYTHON=.venv/bin/python
 ```
+
+`setup.sh` creates `.venv` and installs the shell's dependencies plus any domain package this
+track carries. It prefers `uv` when present and falls back to the stdlib `venv` module.
 
 `make verify` must pass on a clean clone. If it does not, that is a bug in the track baseline
 and belongs to the teaching team. Report it and do not spend the session on it.
+
+Add `PYTHON=.venv/bin/python` to every `make` call, or activate the environment once with
+`source .venv/bin/activate` and drop the argument.
 
 Then read these four files, in this order. Nothing else yet.
 
