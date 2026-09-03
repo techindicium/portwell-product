@@ -1,46 +1,52 @@
-# Product Development Lifecycle delivery system
+# Product at Portwell Software
 
-You are working inside the PDLC track repository for a course on harness
-engineering. The subject of the work is the delivery system in this repository, not the
-fictional product it serves.
+Portwell Software sells Portwell WMS, a warehouse management platform, to mid-market logistics
+operators. This repository holds the Product work for Portwell Assist, the AI-assisted
+customer-support product currently in pilot.
 
 ## Read before acting
 
-`README.md` for the layout and the three invariants. `docs/architecture-rules.md` for what the
-track may and may not do. `docs/policies.md` for the fixture's prose rules, several of which
-are deliberately not yet enforceable.
+`docs/how-we-work-today.md` describes the process as it is actually practised. It is prose, it
+is incomplete, and parts of it are contradicted by the records in `docs/incidents/`.
 
-Do not read the whole repository. `skills/lifecycle-trace/SKILL.md` carries a context contract;
-follow it. Loading more than the contract requires makes it harder for a reviewer to see which
-fact drove a decision, and the pull request has to show that.
+`docs/policies.md` holds the company's rules. Most are enforced by nothing except being read.
 
-## How work is recorded
+`docs/architecture-rules.md` and `docs/identifiers.md` hold the constraints that do apply.
+Identifiers are shared with three other teams, so they may be referenced but never renumbered.
 
-Every state change goes through `python3 scripts/lifecycle.py advance`. It refuses invalid
-transitions, missing evidence, and exhausted budgets, and its refusals name the invariant and
-the recovery action. Read the refusal rather than working around it.
+## What is not here
 
-Never write `state/lifecycle.jsonl` or `state/state-model.json` directly. A hook refuses it.
+There is no defined delivery lifecycle, no recorded state, no approval gates, and no automated
+verification of the process itself. Work is tracked in a spreadsheet and decisions live in
+people's heads.
+
+Do not silently build that layer. Proposing a lifecycle, a state file, a set of checks and a
+hook to enforce them is the obvious reaction to reading this repository, and doing it unasked
+replaces a decision the team has not made with one nobody agreed to.
+
+When a task would be easier with a control that does not exist, name the missing control and
+what it would protect, then continue without it.
+
+## Working here
+
+- Name the artifacts consulted, where each came from, and how old each is. Where the age is
+  unknown, write unknown. Do not estimate it.
+- Where two sources disagree, report both and say the disagreement is unresolved. Do not pick
+  the more plausible one.
+- Where a rule in `docs/policies.md` applies and nothing enforces it, say so.
 
 ## Stop conditions
 
 Stop and say so rather than continuing when:
 
-- `scripts/lifecycle.py` refuses a transition and the refusal is correct.
-- The correction budget in `state/state-model.json` is exhausted.
-- A required input is stale, superseded, or has no source. Record that as a finding; do not
-  substitute a plausible value.
-- Work would need a permission this project does not grant. Ask; do not route around it.
+- A required input is stale, superseded, or has no identifiable source.
+- Two artifacts contradict each other on a fact the task depends on.
+- The task needs a permission this project does not grant. Ask; do not route around it.
+- Finishing would mean writing down a fact nobody recorded.
 
 An empty field is information. Leave it empty and say why.
 
-## Verification order
-
-Deterministic checks first, always: `make verify`. The `verifier` agent reads evidence after
-those checks have run, not instead of them. Human approval comes last and is not yours to
-record on someone's behalf.
-
 ## Writing
 
-Plain declarative prose. No em dashes. State what is true, including what failed. A green run
-that hides a correction is worth less to this course than a red one that is legible.
+Plain declarative prose. No em dashes. State what is true, including what failed and what could
+not be determined.

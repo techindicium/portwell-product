@@ -1,10 +1,9 @@
 #!/usr/bin/env bash
-# Create the virtual environment and install everything this track needs.
+# Create the virtual environment and install what this repository needs.
 #
-# Uniform across tracks: it installs the shell's own dependencies, then any
-# domain package the track happens to carry (the SDLC track has service/, the
-# others may add their own). A track with no domain package installs nothing
-# extra and still ends green.
+# Installs the shared dependencies, then any package in this repository that
+# carries its own pyproject.toml. A repository with no such package installs
+# nothing extra and still ends cleanly.
 #
 # Prefers uv when present because it resolves an interpreter matching
 # requires-python. Falls back to the stdlib venv module.
@@ -34,10 +33,10 @@ install() {
   fi
 }
 
-say "Installing shell dependencies"
+say "Installing shared dependencies"
 install -r requirements.txt
 
-# Any directory holding a pyproject.toml is a domain package for this track.
+# Any directory holding a pyproject.toml is a package belonging to this repository.
 found_pkg=0
 for pj in */pyproject.toml; do
   [ -f "$pj" ] || continue
@@ -51,8 +50,15 @@ for pj in */pyproject.toml; do
     install -e "$pkg"
   fi
 done
-[ "$found_pkg" -eq 0 ] && say "No domain package in this track yet, shell dependencies only"
+[ "$found_pkg" -eq 0 ] && say "No local package here, shared dependencies only"
+
+# Any local database is a build artifact, rebuilt from its committed SQL.
+if [ -x scripts/build_db.py ]; then
+  say ""
+  say "Building the local database"
+  "$PY" scripts/build_db.py
+fi
 
 say ""
 say "Python:  $("$PY" -V)"
-say "Ready.   Next: make verify"
+say "Ready.   Next: make test"

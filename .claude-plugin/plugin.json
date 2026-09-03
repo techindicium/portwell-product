@@ -1,15 +1,7 @@
 {
-  "name": "pdlc-delivery-system",
+  "name": "portwell-product",
   "version": "0.1.0",
-  "description": "Agentic Product Development Lifecycle delivery system for the Portwell Assist course fixture. Extended weekly by the track's four groups.",
-  "author": {
-    "name": "Advanced SDLC and harness engineering, PDLC track"
-  },
-  "category": "development",
-  "keywords": [
-    "harness-engineering",
-    "pdlc",
-    "lifecycle",
-    "course-fixture"
-  ]
+  "description": "Product at Portwell Software.",
+  "author": { "name": "Portwell Software" },
+  "keywords": ["portwell", "product"]
 }

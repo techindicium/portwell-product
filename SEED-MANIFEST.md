@@ -1,7 +1,8 @@
 # Seed manifest, PDLC track
 
-**Status:** the shell is in place and `make verify` passes. The track's domain material is not
-seeded yet. This file is the specification for that work.
+**Status:** the shell is in place. The track ships the legacy starting condition only, with no
+lifecycle, no controls, and no process verification, because building those is the four modules'
+work. The track's domain material is not seeded yet. This file is the specification for that work.
 
 **Audience:** teaching team. Delete this file before handing the repository to participants.
 
@@ -36,7 +37,8 @@ evidence that genuinely does not settle the question.
 | `docs/dependencies.md` | The evidence this track consumes from DDLC and KDLC, and what it verifies | |
 | `docs/backlog.md` | Eight to twelve items, one of which does not apply here | |
 | `docs/architecture-rules.md` | Append PDLC rules and the blast-radius table | High-radius: a launch decision, and a change to an adoption measure |
-| `scenarios/visible/SC-PDLC-01..06.yaml` | One per family, plus a second adversarial | Each names a real decision or experiment |
+| `legacy/tracker.csv` | What is in flight, with inconsistent statuses and missing owners | The Module 1 trace starts here |
+| `legacy/incidents/` | `INC-01` and `INC-02` as this track saw them | Each traceable to a control that does not exist |
 
 ## Seeded problems, one per family
 
@@ -57,7 +59,7 @@ govern.
 
 ## Acceptance
 
-- `make verify` passes on a clean clone.
+- `make test` passes on a clean clone, or reports that the track has no tests yet.
 - The four stakeholder positions remain unresolved in the seed material.
 - Every visible scenario names a real decision, experiment, or checklist item.
 - The five seeded problems are recorded in `course-shared/heldout/seeded-defects.md`.
