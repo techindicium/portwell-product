@@ -179,9 +179,9 @@ stateDiagram-v2
 
 ```bash
 python3 scripts/lifecycle.py advance \
-  --item TCK-004417 \
+  --item TICKET-004417 \
   --to context \
-  --evidence evidence/TCK-004417/context-manifest.md \
+  --evidence evidence/TICKET-004417/context-manifest.md \
   --actor agent \
   --note "why this advance is justified"
 ```

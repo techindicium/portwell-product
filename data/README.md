@@ -7,7 +7,7 @@ product work is.
 | :- | :- |
 | `discovery/` | The opportunity brief, the design document, and the four stakeholder requests |
 | `decisions/` | Decision records. There are two. More decisions than that have been made. |
-| `experiments/` | EXP-02, its design and its results |
+| `experiments/` | EXPERIMENT-02, its design and its results |
 | `launch/` | The readiness checklist and the draft adoption measures |
 | `product-tracker.xlsx` | What is in flight |
 
