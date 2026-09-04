@@ -1,4 +1,6 @@
-# The shell's own dependencies. Two, on purpose.
-# scripts/ and hooks/ are standard library only so hooks run without a virtual environment.
+# Dependencies for the product project.
+# scripts/ is standard library only so it runs without a virtual environment.
 pytest>=8
 pyyaml>=6
+openpyxl>=3.1
+python-docx>=1.1

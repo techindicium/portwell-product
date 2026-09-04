@@ -1,0 +1,5 @@
+# Product additions.
+#
+# There is nothing to build here. The team's artifacts are documents and spreadsheets, and
+# nothing in this repository reads them.
+PYTEST_PATHS =
