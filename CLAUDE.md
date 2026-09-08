@@ -1,7 +1,7 @@
 # Product at Portwell Software
 
 Portwell Software sells Portwell WMS, a warehouse management platform, to mid-market logistics
-operators. This repository holds the Product work for Portwell Assist, the AI-assisted
+operators. This repository holds the Product work for the help portal, the AI-assisted
 customer-support product currently in pilot.
 
 ## Read before acting

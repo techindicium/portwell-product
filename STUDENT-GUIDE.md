@@ -8,17 +8,17 @@ anything.
 ## What this repository is
 
 Portwell Software is a fictional B2B vendor preparing an AI-assisted customer-support product
-called Portwell Assist. Four tracks build the delivery systems Assist depends on. This
+called the help portal. Four tracks build the delivery systems the portal depends on. This
 repository is the **Product Development Lifecycle** one.
 
 ```mermaid
 flowchart LR
-  subgraph P["Portwell Assist, the product"]
+  subgraph P["the help portal, the product"]
     direction TB
     PROD["Answers support tickets<br/>from the knowledge base<br/>and account data"]
   end
 
-  SDLC["<b>SDLC</b><br/>The Assist service<br/>and its delivery evidence"]
+  SDLC["<b>SDLC</b><br/>The help portal<br/>and its delivery evidence"]
   DDLC["<b>DDLC</b><br/>The analytics:<br/>models, contracts, metrics"]
   KDLC["<b>KDLC</b><br/>The knowledge base:<br/>sourced, reviewed, maintained"]
   PDLC["<b>PDLC</b><br/>The product decisions:<br/>specs, experiments, launch"]
@@ -29,8 +29,8 @@ flowchart LR
   PDLC --> P
 ```
 
-**The important distinction.** This repository is not Assist. It is the *agentic delivery
-system* that produces one of Assist's lifecycle artifacts. The subject of the work is the
+**The important distinction.** This repository is not the help portal. It is the *agentic delivery
+system* that produces one of the help portal's lifecycle artifacts. The subject of the work is the
 harness, not the fictional product.
 
 ---
