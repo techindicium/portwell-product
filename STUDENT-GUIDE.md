@@ -1,37 +1,49 @@
 # Student guide: the PDLC track
 
-Everything needed to work in this repository. Read the first three sections before touching
-anything.
+This repository is **portwell-product**, the product repository at Portwell
+Software. It is the working environment for the PDLC track.
+
+Read the first three sections before touching anything.
 
 ---
 
-## What this repository is
+## Two layers, and telling them apart
 
-Portwell Software is a fictional B2B vendor preparing an AI-assisted customer-support product
-called the help portal. Four tracks build the delivery systems the portal depends on. This
-repository is the **Product Development Lifecycle** one.
+Almost everything here is Portwell's own material and does not know a course exists. It reads
+the way a real repository reads, because that is what it is standing in for.
+
+| Layer | Files | Talks about the course |
+| :- | :- | :- |
+| Course | `README.md`, `STUDENT-GUIDE.md`, `CLAUDE.md` | Yes |
+| Company | everything else | No |
+
+That separation is worth noticing early, because it is the same separation the course is about.
+The company layer is the fixture. What gets built around it is the harness.
+
+---
+
+## Where this team sits
+
+Four teams at Portwell work on the help portal. Each owns some artifacts and borrows others, and the
+borrowing is where things break.
 
 ```mermaid
 flowchart LR
-  subgraph P["the help portal, the product"]
-    direction TB
-    PROD["Answers support tickets<br/>from the knowledge base<br/>and account data"]
-  end
-
-  SDLC["<b>SDLC</b><br/>The help portal<br/>and its delivery evidence"]
-  DDLC["<b>DDLC</b><br/>The analytics:<br/>models, contracts, metrics"]
-  KDLC["<b>KDLC</b><br/>The knowledge base:<br/>sourced, reviewed, maintained"]
-  PDLC["<b>PDLC</b><br/>The product decisions:<br/>specs, experiments, launch"]
-
-  SDLC --> P
-  DDLC --> P
-  KDLC --> P
-  PDLC --> P
+  A["<b>Portal engineering</b><br/>the service"]
+  D["<b>Analytics</b><br/>models, metric definitions"]
+  K["<b>Knowledge base</b><br/>published articles"]
+  P["<b>Product</b><br/>discovery, experiments, decisions"]
+  PA["<b>the help portal</b><br/>answers support tickets"]
+  A --> PA
+  D -->|"pinned metrics"| A
+  K -->|"article index"| A
+  P -->|"launch decisions"| A
+  D --> P
+  K --> P
 ```
 
-**The important distinction.** This repository is not the help portal. It is the *agentic delivery
-system* that produces one of the help portal's lifecycle artifacts. The subject of the work is the
-harness, not the fictional product.
+`docs/identifiers.md` says what this repository owns and what it borrows.
+`docs/dependencies.md`, where it exists, says what breaks when a borrowed contract slips.
 
 ---
 
@@ -39,59 +51,101 @@ harness, not the fictional product.
 
 ```bash
 ./scripts/setup.sh          # or: make setup
-make verify PYTHON=.venv/bin/python
+make test
 ```
 
 `setup.sh` creates `.venv` and installs the shell's dependencies plus any domain package this
 track carries. It prefers `uv` when present and falls back to the stdlib `venv` module.
 
-`make verify` must pass on a clean clone. If it does not, that is a bug in the track baseline
-and belongs to the teaching team. Report it and do not spend the session on it.
+`make help` lists every target. There are two. That is not a stripped-down starting kit; it is
+an accurate picture of what this team has automated.
 
-Add `PYTHON=.venv/bin/python` to every `make` call, or activate the environment once with
-`source .venv/bin/activate` and drop the argument.
-
-Then read these four files, in this order. Nothing else yet.
+Then read these four, in this order. Nothing else yet.
 
 | Order | File | Answers |
 | -: | :- | :- |
-| 1 | `README.md` | The layout, and the three rules that cannot be changed |
-| 2 | `docs/policies.md` | Portwell's rules, and which are enforced anywhere today |
-| 3 | `docs/dependencies.md` | What arrives from other tracks, and what this repository verifies about it |
-| 4 | `scenarios/visible/` | Cases that each name a real fixture item and say what it detects |
+| 1 | `docs/how-we-work-today.md` | The current process, as practised, including where it is vague |
+| 2 | the tracker in `data/` | What is in flight, with the inconsistencies left in |
+| 3 | `docs/incidents/` | The two things that went wrong, and what nobody checked |
+| 4 | `docs/policies.md` | Portwell's rules, and how few of them anything enforces |
 
-### The thing to understand before writing code
+### The thing to understand before writing any code
 
-`make verify` passes. The system is still wrong. The fixtures carry seeded problems that a green
-suite does not catch, and finding them is the work. A green suite is evidence that the checks do
-not cover what is broken, not evidence that nothing is broken.
+Nothing here verifies the process, so nothing will tell the group it has gone wrong. There is no
+green suite to trust and none to distrust. The first useful output of this week is not a
+control. It is an accurate description of what currently happens and what it costs.
+
+---
+
+## What is deliberately absent
+
+Every row is a module's deliverable. None of it is missing by accident.
+
+| Absent | Built in | The trap |
+| :- | :- | :- |
+| A state model, transitions, evidence conventions, a way to record work | Module 1 | Designing it before tracing a real case through the current process |
+| A context contract, safe tools, permissions, an interception point | Module 2 | Extending four surfaces instead of one |
+| Executable controls over the prose policies | Module 3 | Writing a new paragraph and calling it a control |
+| An evaluation set, ordered checks, operating measures | Module 4 | Counting activity and calling it an outcome |
+
+**Do not build ahead.** A group that notices a missing control before its module has arrived
+should record the observation, name what the control would protect, and move on. The
+observation earns marks. Building Module 3 in week one removes the exercise and usually
+produces the wrong control, because the evidence for which control is needed has not been
+gathered yet.
 
 ---
 
 ## The map
 
 ```text
-.claude/settings.json        Project-scoped permissions
-.claude-plugin/plugin.json   Plugin manifest
-CLAUDE.md                    What an agent reads on entry
-
-skills/                      Named lifecycle procedures
-agents/                      Specialist reviewers
-hooks/hooks.json             Where deterministic interception is wired
-scripts/                     Deterministic helpers, standard library only
-scripts/hooks/               Hook implementations
-mcp/                         Tool servers and simulated external services
-
-state/state-model.json       States, transitions, evidence rules, budgets
-state/lifecycle.jsonl        The append-only record of what happened
-evidence/<item>/             What each transition recorded
-
-fixtures/                    The seed material, deliberately imperfect
-docs/                        Rules, policies, identifiers, dependencies, backlog
-scenarios/visible/           Cases that can be run
-scenarios/heldout/           Arrives in Module 4, refused until then
-tests/                       The repository's own checks
+CLAUDE.md                    what an agent reads on entry
+docs/how-we-work-today.md    the current process, as practised
+docs/policies.md             Portwell's rules, mostly enforced nowhere
+docs/architecture-rules.md   the constraints that do apply, and what holds each one
+docs/identifiers.md          owned and consumed identifiers, shared across four tracks
+data/                        operational data, databases, and the files kept beside them
+docs/incidents/              INCIDENT-01 and INCIDENT-02, written up after the fact
+docs/interviews/             the people who do the work, describing it in their own words
+docs/pr-notes/               a couple of change notes, of the many never written
+scripts/setup.sh             the only script shipped
+Makefile                     setup and test
+Makefile.local               the track's own targets, never overwritten by a shell update
 ```
+
+Anything the group builds is new. There is no prescribed place for it, and choosing where things
+go is part of Module 1.
+
+---
+
+## The systems Portwell runs
+
+Four tools sit outside this repository, and the process described in `docs/interviews/` moves
+through them. Each is a service the team brings up locally.
+
+| System | Repository | REST | MCP endpoint |
+| :- | :- | :- | :- |
+| Issue tracker | `mock-jira` | http://localhost:8010 | http://localhost:8011/mcp |
+| CRM | `mock-salesforce` | http://localhost:8020 | http://localhost:8021/mcp |
+| Service desk | `mock-servicenow` | http://localhost:8030 | http://localhost:8031/mcp |
+| Knowledge base | `mock-confluence` | http://localhost:8040 | http://localhost:8041/mcp |
+
+Bring one up with `docker compose up` in its repository. The ports do not overlap, so all four
+run together. `course-shared/tools/mock-systems.json` has the connection details.
+
+**Nothing here is wired to them.** Connecting the ones this team needs is part of building the
+harness, not something the repository arrives with.
+
+**Two things worth knowing before connecting anything.**
+
+The systems disagree with each other, and so do the documents around them. Some disagreements
+are settled by asking the system that owns the fact. Some are settled by reading what a page
+used to say. Some are not settled anywhere, and the right answer is to say so rather than pick
+the more plausible one. Reporting a number without saying which source it came from is the
+mistake this fixture is built to catch.
+
+A tool that answers a question is not the same as having checked. Retrieving a page and
+summarising it skips the step where the corpus turns out to contradict itself.
 
 ---
 
@@ -99,170 +153,75 @@ tests/                       The repository's own checks
 
 | Command | Does |
 | :- | :- |
-| `make verify` | Every deterministic check, in the order they should run |
-| `make check-state` | Validate the lifecycle log against the state model |
-| `make scenarios` | Check the shape of every visible scenario |
-| `make test` | The test suite |
-| `make hooks-test` | Exercise the guard hook's refusal and allow paths |
-| `python3 scripts/lifecycle.py show --item <ID>` | Where one item stands and how it got there |
+| `make setup` | Create `.venv` and install what this track needs |
+| `make test` | Run whatever tests this track has |
+| `make help` | List the targets |
 
-Extend `make verify` through `Makefile.local`, never by editing `Makefile`. The course shell
-owns `Makefile` and updates it, which would discard the change.
+Add every new target to `Makefile.local`, never to `Makefile`. The course shell owns `Makefile`
+and refreshes it, which would discard the change. `Makefile.local` is the track's own file.
+
+Add `PYTHON=.venv/bin/python` to every `make` call, or activate the environment once with
+`source .venv/bin/activate` and drop the argument.
 
 ---
 
-## The three rules that cannot be changed
+## The three constraints that do apply
 
-Each has a test that fails when the control is removed. Everything else in this repository is
-open to change.
+Everything else in this repository is open to change, including the layout, the documentation,
+and this guide.
 
-| Rule | Control | Regression test |
+| Constraint | Why | Enforced by |
 | :- | :- | :- |
-| State moves only through `scripts/lifecycle.py` | `scripts/hooks/guard_paths.py` | `tests/test_guard_paths.py` |
-| The state model keeps its failure states | The state model's own tests | `tests/test_state_model.py` |
-| Held-out cases stay held out | Settings deny, plus the guard hook | `tests/test_scenarios.py` |
+| Identifiers owned by another track are referenced, never renumbered | Three other tracks key on them, and renumbering is unrecoverable | Nothing. `docs/identifiers.md` says which are owned here. |
+| No fixture data leaves the repository, and no tool reaches a real endpoint | The fixtures stand in for customer data | `.claude/settings.json`, which denies the network commands |
+| `docs/incidents/` and `docs/pr-notes/` is a record, not a workspace | Correcting a system is the work; editing the record of what happened is not | Nothing |
 
-Attempting to write `state/lifecycle.jsonl` directly produces this:
-
-```text
-REFUSED: Lifecycle state is append-only through the CLI.
-  what happened: a write to state/lifecycle.jsonl was blocked by scripts/hooks/guard_paths.py
-  to recover:    Record the transition with: python3 scripts/lifecycle.py advance ...
-```
-
-Read the refusal rather than working around it. Every refusal in this repository names the
-invariant it protects and the action that recovers from it. That shape is also the standard for
-controls built during the course.
+Two of the three are enforced by nothing at all. Noticing that, and deciding which of them is
+worth an executable control, is Module 3.
 
 ---
 
-## The lifecycle, and how to record work
+## What each week delivers
 
-Every item travels the same path. Failure states are part of it, not exceptions to it.
+One integrated group pull request per week, stating the intended outcome, acceptance evidence,
+participant contributions, the execution trace, known limitations, and a decision record for
+any trade-off introduced.
 
 ```mermaid
-stateDiagram-v2
-  [*] --> intake
-  intake --> context
-  context --> route
-  route --> act
-  act --> verify
-  verify --> approve
-  verify --> act : Correction, max 3
-  approve --> handoff
-  approve --> act
-  handoff --> observe
-  observe --> retired
-  observe --> intake : A new item
-
-  intake --> rejected
-  intake --> blocked
-  context --> blocked
-  context --> escalated
-  route --> escalated
-  act --> blocked
-  act --> escalated
-  verify --> escalated
-  verify --> rejected
-  approve --> rejected
-  blocked --> context
-  blocked --> escalated
-  escalated --> route
-  escalated --> rejected
-  handoff --> retired
-
-  rejected --> [*]
-  retired --> [*]
+flowchart LR
+  L["<b>Legacy</b><br/>What is here on day one.<br/>No lifecycle, no controls."]
+  M1["<b>Module 1</b><br/>Lifecycle and state"]
+  M2["<b>Module 2</b><br/>Harness architecture"]
+  M3["<b>Module 3</b><br/>Meta-harness controls"]
+  M4["<b>Module 4</b><br/>Verification and operation"]
+  L --> M1 --> M2 --> M3 --> M4
 ```
-
-### Advancing an item
-
-```bash
-python3 scripts/lifecycle.py advance \
-  --item TICKET-004417 \
-  --to context \
-  --evidence evidence/TICKET-004417/context-manifest.md \
-  --actor agent \
-  --note "why this advance is justified"
-```
-
-The command refuses an undeclared transition, missing evidence, evidence that does not exist,
-empty evidence, evidence outside the repository, and an exhausted budget.
-
-### What each state requires
-
-| State | Evidence file | Records |
-| :- | :- | :- |
-| `intake` | `request.md` | The asked-for outcome, the constraints, what is out of scope |
-| `context` | `context-manifest.md` | Every artifact loaded, where it came from, how old it is |
-| `route` | `routing-decision.md` | The four inputs, the chosen path, and what would have chosen differently |
-| `act` | `attempt-trace.md` | What was attempted, including what did not work |
-| `verify` | `verification-report.md` | The check results, pass or fail |
-| `approve` | `approval.md` | Who accepted it, against which acceptance conditions |
-| `handoff` | `handoff-note.md` | What a consumer needs to know, including what is now their problem |
-| `observe` | `observation.md` | What was measured, or when it will be |
-
-An artifact whose age matters and whose age is unknown is recorded as unknown, never estimated.
-An empty field is information.
-
-### The budgets
-
-Set in `state/state-model.json`. When one is exhausted, advance to `escalated` rather than
-trying again.
-
-| Budget | Limit |
-| :- | -: |
-| Correction attempts, `verify` back to `act` | 3 |
-| Transitions per item | 40 |
-| Blocked transitions before escalation is required | 2 |
-
----
-
-## A change, start to finish
-
-```mermaid
-flowchart TB
-  A["<b>1. Pick a scenario</b><br/>scenarios/visible/ names a real item<br/>and says what it detects"]
-  B["<b>2. Record intake</b><br/>Write evidence/&lt;ID&gt;/request.md<br/>Advance to intake"]
-  C["<b>3. Assemble context</b><br/>Load only what the decision needs<br/>List it in context-manifest.md"]
-  D["<b>4. Decide the route</b><br/>Spec completeness, pattern coverage,<br/>blast radius, novelty"]
-  E["<b>5. Act</b><br/>Make the change.<br/>Record what was attempted."]
-  F["<b>6. Verify</b><br/>make verify<br/>Record the result either way"]
-  G{"Passed?"}
-  H["<b>7. Approve and hand off</b><br/>Named acceptance, then the contract<br/>the consumer needs"]
-  I["<b>Correct</b><br/>Up to 3 attempts"]
-  J["<b>Escalate</b><br/>Budget exhausted.<br/>Name the owner."]
-
-  A --> B --> C --> D --> E --> F --> G
-  G -->|"Yes"| H
-  G -->|"No"| I
-  I --> E
-  I -.->|"After 3"| J
-  style J fill:#fde8e8,stroke:#b05a5a
-  style H fill:#e8f5e9,stroke:#5a9a5f
-```
-
-**Record the failing verification too.** A `verify` transition whose report says the checks
-failed is the most useful record in the log. Deleting it and re-running until green removes the
-evidence that the control worked.
-
----
-
-## What each week must deliver
-
-One integrated group pull request per week. Every pull request states the intended outcome,
-acceptance evidence, participant contributions, the execution trace, known limitations, and a
-decision record for any trade-off introduced.
 
 | Module | Build | The part groups most often miss |
 | :- | :- | :- |
-| **1**, lifecycle and state | The track's real lifecycle: artifacts, transitions, approvals, failure states | Failure states, retry limits, escalation conditions, terminal states |
+| **1**, lifecycle and state | The track's lifecycle: artifacts, states, transitions, approvals, failure states, and a way to record them | Failure states, retry limits, escalation conditions, terminal states |
 | **2**, harness architecture | A context contract, two safe tools, permissions, one interception point, one induced failure | A prohibited context class that is *prevented* rather than discouraged |
-| **3**, meta-harness controls | One prose rule turned into an executable control | The regression case that fails before the control exists |
+| **3**, meta-harness controls | One prose rule from `docs/policies.md` turned into an executable control | The regression case that fails before the control exists |
 | **4**, verification and operation | An evaluation set, ordered checks, held-out failure analysis, operating measures | Distinguishing model, harness, environment, specification, and fixture-data causes |
 
-Before implementing the assigned lens, model the whole capability. The lens is the part to go
+Before implementing the group's lens, model the whole capability. The lens is the part to go
 deeper on, not the part to do instead.
+
+### Module 1 in more detail, since it starts from nothing
+
+The deliverable is not a diagram. It is a lifecycle that a real item can be moved through, plus
+the record of moving one.
+
+1. Pick one real item from the tracker in `data/`.
+2. Trace what actually happened to it, using `docs/incidents/` and `docs/pr-notes/` and the fixtures. At each step: what was
+   decided, on what evidence, by whom.
+3. Name the states that trace implies, including the ones where it stalled or went wrong.
+4. Decide what evidence each state should require before an item may leave it.
+5. Decide how a transition gets recorded, and build the smallest thing that records one.
+6. Re-run the trace through what was built, and keep the output.
+
+Step 3 is where most of the marks are, and failure states are most of step 3. An item that can
+only succeed has not been modelled.
 
 ### The four lenses
 
@@ -290,20 +249,24 @@ Five criteria, 0 to 2 each.
 **The question asked of every submission:** did anything fail on purpose? A pull request with no
 red state anywhere scores 1 at most on Evidence, however much passes.
 
+In Module 1 that red state is usually the trace itself: the point where the current process lost
+information, shown rather than asserted.
+
 ---
 
 ## Common mistakes
 
 | Mistake | Why it costs marks | Instead |
 | :- | :- | :- |
+| Designing the lifecycle before tracing a real item | Produces a plausible model with no evidence behind it | Trace first, then name the states the trace implies |
+| Building Module 3's controls in week one | Removes the exercise, and usually picks the wrong control | Record the missing control as an observation |
+| Modelling only the happy path | The failure states are the content | Ask what happens when each input is wrong |
 | Adding a rule to `CLAUDE.md` and calling it a control | Prose is advisory. Nothing refuses a violation. | Climb to a test, a hook, or a schema |
 | A tool that takes a shell string | That is a shell, not a tool | Named arguments, validated, with a refusal path |
-| Deleting a seeded defect from `fixtures/` | Removes the exercise rather than solving it | Build the check that catches it |
-| Editing `Makefile` to add checks | The shell owns it and will overwrite | Use `Makefile.local` |
-| Running the reviewer agent before `make verify` | Inverts the verification order | Deterministic checks first, always |
-| A green run with no recorded failure | Nothing is demonstrated | Keep the failing verification report |
-| Building an orchestration layer in week two | Cost with no evidence | One case working end to end first |
-| Loosening an assertion to make it pass | Deletes the check | Update it deliberately and keep it exact |
+| Editing `docs/incidents/` and `docs/pr-notes/` to make it consistent | Rewrites the record instead of fixing a system | Leave it. The inconsistency is the finding. |
+| Deleting an inconvenient fixture | Removes the exercise rather than solving it | Build the check that catches it |
+| Editing `Makefile` to add targets | The shell owns it and will overwrite | Use `Makefile.local` |
+| A green run with no recorded failure | Nothing is demonstrated | Keep the failing output |
 
 ---
 
@@ -311,18 +274,17 @@ red state anywhere scores 1 at most on Evidence, however much passes.
 
 | Symptom | Cause and fix |
 | :- | :- |
-| `make verify` fails on a clean clone | A baseline bug. Report it to the teaching team; do not debug it. |
-| A write is refused with `REFUSED:` | Working. Read the recovery line in the message. |
-| `lifecycle.py` refuses a transition | The state model does not declare it. Either use a declared transition, or change the model deliberately and say why in the pull request. |
-| `lifecycle.py` says evidence does not exist | Write the evidence file before advancing the item. |
-| A correction is refused after three attempts | The budget is exhausted. Advance to `escalated` and name the owner. |
-| `make check-state` reports the log is invalid | Someone hand-edited `state/lifecycle.jsonl`. Repair it through the CLI or reset the item and re-record its history. |
-| `tests/test_scenarios.py` fails on the held-out directory | Expected from Module 4. Update the test in the same commit as the handover. |
-| Claude Code asks for a permission the project denies | Ask. Do not route around a deny rule; the deny rule is the exercise. |
+| `./scripts/setup.sh` fails | A baseline bug. Report it to the teaching team and do not debug it. |
+| `make test` says there are no tests | Correct for a track with no domain package yet. Not an error. |
+| A command is refused by project permissions | Ask a teaching assistant. Do not route around a deny rule; the deny rule is deliberate. |
+| Two fixtures contradict each other | Expected. Report both and leave the disagreement open. Do not pick the more plausible one. |
+| An artifact has no date and the task needs one | Record it as unknown. Never estimate it. An empty field is information. |
+| The process in `docs/how-we-work-today.md` does not match `docs/incidents/` and `docs/pr-notes/` | Expected, and it is the Module 1 exercise. |
 
 ---
 
 ## Where to ask
 
 The track has two teaching assistants: one on the Product Development Lifecycle domain, one on harness
-engineering, integration, and verification. Bring the failing output, not a description of it.
+engineering, integration, and verification. Bring the failing output rather than a description
+of it.
